@@ -1,12 +1,9 @@
 CC = gcc
-TARGET = listas.exe
-SRC = listas.c
+TARGET = main
+SRC = *.c
 
-all: $(TARGET)
-	$(TARGET)
-
-$(TARGET): $(SRC)
-	$(CC) -o $(TARGET) $(SRC)
+all:
+	$(CC) -Wall -Wextra -std=c11 -O2 $(SRC) -o $(TARGET)
 
 clean:
-	del /Q $(TARGET)
+	rm -f $(TARGET)
