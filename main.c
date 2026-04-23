@@ -3,7 +3,7 @@
 
 int main(){
 
-    List lista = list_create();
+    List* lista = new_list();
     
     bool flag = true;
     char c;
@@ -78,6 +78,6 @@ int main(){
         }
     }
 
-    list_destroy(lista);
+    destroy_list(lista);
     return 0;
 }

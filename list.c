@@ -20,7 +20,7 @@ typedef struct node node;
 
 struct node
 {
-    char data;
+    TYPE_LIST data;
     node *next;
     node *prev;
 };
@@ -35,7 +35,7 @@ struct list
  * Pequenas funções de auxílio
  */
 
-node *find_node(List list, int index)
+node *find_node(List *list, int index)
 {
     node *tmp = list->head;
     int len = list->length;
@@ -60,7 +60,7 @@ node *find_node(List list, int index)
     return tmp;
 }
 
-bool list_is_empty(List list)
+bool list_is_empty(List *list)
 {
     if (!list)
     {
@@ -69,7 +69,7 @@ bool list_is_empty(List list)
     return list->head == NULL;
 }
 
-int list_length(List list)
+int list_length(List *list)
 {
     if (!list)
     {
@@ -82,9 +82,9 @@ int list_length(List list)
  * Funções de alocação e desalocação de mémoria
  */
 
-List list_create()
+List *new_list()
 {
-    List list = malloc(sizeof(List));
+    List *list = malloc(sizeof(List));
     if (list)
     {
         list->head = NULL;
@@ -93,7 +93,7 @@ List list_create()
     return list;
 }
 
-void list_destroy(List list)
+void destroy_list(List *list)
 {
     if (!list_is_empty(list))
     {
@@ -111,7 +111,7 @@ void list_destroy(List list)
     free(list);
 }
 
-node *node_alloc(char data)
+node *node_alloc(TYPE_LIST data)
 {
     node *novoNo = malloc(sizeof(node));
     if (novoNo)
@@ -127,7 +127,7 @@ node *node_alloc(char data)
  * Funções de inserção de elementos
  */
 
-void list_insert_front(List list, char data)
+void list_insert_first(List *list, TYPE_LIST data)
 {
     if (!list)
     {
@@ -160,7 +160,7 @@ void list_insert_front(List list, char data)
     }
 }
 
-void list_insert_back(List list, char data)
+void list_insert_last(List *list, TYPE_LIST data)
 {
     if (!list)
     {
@@ -193,7 +193,7 @@ void list_insert_back(List list, char data)
     }
 }
 
-void list_insert_by_index(List list, char data, int index)
+void list_insert_by_index(List *list, TYPE_LIST data, int index)
 {
     if (!list)
     {
@@ -237,15 +237,15 @@ void list_insert_by_index(List list, char data, int index)
  * Funções de remoção de elementos
  */
 
-char list_remove_first(List list)
+TYPE_LIST list_remove_first(List *list)
 {
     if (list_is_empty(list))
     {
-        return '\0';
+        return Z_VALUE;
     }
 
     node *first = list->head;
-    char data = first->data;
+    TYPE_LIST data = first->data;
 
     if (list_length(list) == 1)
     {
@@ -268,15 +268,15 @@ char list_remove_first(List list)
     return data;
 }
 
-char list_remove_last(List list)
+TYPE_LIST list_remove_last(List *list)
 {
     if (list_is_empty(list))
     {
-        return '\0';
+        return Z_VALUE;
     }
 
     node *last = list->head->prev;
-    char data = last->data;
+    TYPE_LIST data = last->data;
 
     if (list_length(list) == 1)
     {
@@ -297,12 +297,12 @@ char list_remove_last(List list)
     return data;
 }
 
-char list_remove_by_index(List list, int index)
+TYPE_LIST list_remove_by_index(List *list, int index)
 {
     int len = list_length(list);
     if (list_is_empty(list) || index < 0 || index >= len)
     {
-        return '\0';
+        return Z_VALUE;
     }
 
     if (index == 0)
@@ -315,7 +315,7 @@ char list_remove_by_index(List list, int index)
     }
 
     node *curr = find_node(list, index);
-    char data = curr->data;
+    TYPE_LIST data = curr->data;
 
     node *right = curr->next;
     node *left = curr->prev;
@@ -329,7 +329,7 @@ char list_remove_by_index(List list, int index)
     return data;
 }
 
-void list_clear(List list)
+void list_clear(List *list)
 {
     if (!list_is_empty(list))
     {
@@ -352,7 +352,7 @@ void list_clear(List list)
  * Funções de busca de elementos
  */
 
-int list_find_data(List list, char data)
+int list_find_data(List *list, TYPE_LIST data)
 {
     if (list_is_empty(list))
     {
@@ -374,12 +374,12 @@ int list_find_data(List list, char data)
     return -1;
 }
 
-char list_get_data(List list, int index)
+TYPE_LIST list_get_data(List *list, int index)
 {
     int len = list_length(list);
     if (list_is_empty(list) || index < 0 || index >= len)
     {
-        return '\0';
+        return Z_VALUE;
     }
 
     node *curr = find_node(list, index);
@@ -390,7 +390,7 @@ char list_get_data(List list, int index)
  * Função para imprimir a lista completa
  */
 
-void list_print(List list)
+void list_print(List *list)
 {
     printf("[");
     if (list && !list_is_empty(list))
